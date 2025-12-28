@@ -2,9 +2,8 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 
 
-# ======================================================
-# User – מודל הזדהות בסיסי
-# ======================================================
+
+# user
 class User(AbstractUser):
     phone_number = models.CharField(max_length=15, blank=True, null=True)
     date_of_birth = models.DateField(blank=True, null=True)
@@ -13,10 +12,7 @@ class User(AbstractUser):
     def __str__(self):
         return self.username
 
-
-# ======================================================
-# Admin – אדמין גלובלי (אחד לכל האתר)
-# ======================================================
+# admin
 class Admin(models.Model):
     user = models.OneToOneField(
         User,
@@ -27,10 +23,7 @@ class Admin(models.Model):
     def __str__(self):
         return f"Admin: {self.user.username}"
 
-
-# ======================================================
-# Team – צוות ארגוני
-# ======================================================
+# team
 class Team(models.Model):
     name = models.CharField(max_length=100, unique=True)
 
@@ -38,28 +31,24 @@ class Team(models.Model):
         return self.name
 
 
-# ======================================================
-# Employee – עובד (משויך לצוות אחד בלבד)
-# ======================================================
-class Employee(models.Model):
+# member
+class Member(models.Model):
     user = models.OneToOneField(
         User,
         on_delete=models.CASCADE,
-        related_name="employee"
+        related_name="member"
     )
     team = models.ForeignKey(
         Team,
         on_delete=models.CASCADE,
-        related_name="employees"
+        related_name="memebers"
     )
 
     def __str__(self):
         return f"{self.user.username} ({self.team.name})"
 
 
-# ======================================================
-# Task – משימה ארגונית
-# ======================================================
+# task
 class Task(models.Model):
 
     class Status(models.TextChoices):
@@ -68,7 +57,7 @@ class Task(models.Model):
         DONE = 'done', 'Done'
 
     title = models.CharField(max_length=200)
-    description = models.TextField(blank=True)
+    description = models.TextField(blank=True, max_length=500, null=True)
     due_date = models.DateField(blank=True, null=True)
 
     status = models.CharField(
@@ -77,16 +66,16 @@ class Task(models.Model):
         default=Status.PENDING
     )
 
-    # המשימה שייכת לצוות אחד
+    # task belongs to a team
     team = models.ForeignKey(
         Team,
         on_delete=models.CASCADE,
         related_name="tasks"
     )
 
-    # עובד מבצע (אופציונלי)
+    # task assigned to a member
     assigned_employee = models.ForeignKey(
-        Employee,
+        Member,
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
