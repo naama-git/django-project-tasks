@@ -31,8 +31,8 @@ INSTALLED_APPS = [
     "django_bootstrap5",
     "TasksApp",
     'crispy_forms',
-    'crispy_bootstrap5'
-
+    'crispy_bootstrap5',
+    'jazzmin',
 ]
 
 MIDDLEWARE = [
