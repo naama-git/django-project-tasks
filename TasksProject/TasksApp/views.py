@@ -21,6 +21,7 @@ def register(request):
         print(form.errors)
         if form.is_valid():
             form.save()
+            print("User registered successfully.")
             return redirect('login')
     else:
         form = RegisterForm()
@@ -35,8 +36,10 @@ def login_view(request):
         if form.is_valid():
             user = form.get_user()
             login(request, user)
+            print("logged in")
             return redirect('home')
     else:
+
         form = AuthenticationForm()
 
     return render(request, 'login.html', {'form': form})
