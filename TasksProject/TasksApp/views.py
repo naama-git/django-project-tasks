@@ -22,8 +22,8 @@ def register(request):
                 user=user,
                 team=team
             )
-
-            return redirect('login')
+            login(request, user)
+            return redirect('home')
     else:
         form = RegisterForm()
 
@@ -44,3 +44,16 @@ def login_view(request):
         form = AuthenticationForm()
 
     return render(request, 'login.html', {'form': form})
+
+
+
+def tasksList(request):
+   if request.user.is_authenticated:
+         member = Member.objects.get(user=request.user)
+         tasks = member.team.memebers.all()
+         return render(request, 'tasksList.html', {'tasks': tasks})
+   else:
+       return redirect('login')
+   
+
+    
