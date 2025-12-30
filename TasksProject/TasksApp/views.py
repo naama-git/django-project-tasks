@@ -1,12 +1,10 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.shortcuts import render, redirect
+from .forms import RegisterForm
 
 def home(request):
     return render(request, "homePage.html")
-
-
-from django.shortcuts import render, redirect
-from .forms import RegisterForm
 
 
 def register_view(request):
