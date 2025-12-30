@@ -22,6 +22,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin',
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -119,7 +120,24 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Custom User Model
 AUTH_USER_MODEL = "TasksApp.User"
+LOGIN_REDIRECT_URL = 'home'
 
 # Crispy Forms Settings
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
+
+JAZZMIN_SETTINGS = {
+  
+    "site_title": "admin dashboard",
+    "site_brand": "Flow Team",
+    "hide_apps": ["auth.group"], 
+    "hide_models": ["auth.group"], 
+    "order_with_respect_to": ["auth", "your_app_name"],
+    "changeform_format": "horizontal_tabs", 
+}
+JAZZMIN_UI_TWEAKS = {
+    "theme": "zephyr",  
+    
+    "navbar": "navbar-dark",
+    "brand_colour": "navbar-primary",
+}
