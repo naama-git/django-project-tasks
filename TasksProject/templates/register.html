@@ -11,8 +11,9 @@
             <div class="text-start p-4 border rounded shadow-sm bg-light" dir="ltr">
                 <h2 class="mb-4">Register</h2>
 
-                <!-- ⭐ כאן התיקון -->
-                <form method="post">
+                <form method="post" >
+
+
                     {% csrf_token %}
                     {{ form|crispy }}
 

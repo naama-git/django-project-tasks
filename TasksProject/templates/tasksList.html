@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% load django_bootstrap5 %}
+
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h3 class="mb-0"> tasks list - team : {{ team}}</h3>
+            <span class="badge bg-light text-dark">member : {{ user.username }}</span>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Task</th>
+                            <th>description</th>
+                            <th>status</th>
+                            <th>due date </th>
+                            <th>Assign to</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for task in tasks %}
+                        <tr>
+                            <td class="fw-bold">{{ task.title }}</td>
+                            <td>{{ task.description|truncatechars:50 }}</td>
+                            <td>
+                                {% if task.status == 'completed' %}
+                                <span class="badge rounded-pill bg-success">completed</span>
+                                {% elif task.status == 'in_process' %}
+                                <span class="badge rounded-pill bg-warning text-dark">in process</span>
+                                {% else %}
+                                <span class="badge rounded-pill bg-secondary">pending</span>
+                                {% endif %}
+                            </td>
+
+                            <td>{{ task.due_date|date:"d/m/Y" }}</td>
+
+                            <td>
+                           
+                                {% if not task.assigned_employee and not user.is_superuser %}
+                                <form method="post" action="{% url 'update_task_member' task.id %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-sm btn-outline-primary">Assign to me</button>
+                                </form>
+
+                        
+                                {% elif task.assigned_employee.user == user and not user.is_superuser %}
+                                <form method="post" action="{% url 'update_task_status' task.id %}">
+                                    {% csrf_token %}
+                                    <select name="new_status" class="form-select form-select-sm"
+                                        onchange="this.form.submit()">
+                                        <option value="pending" >
+                                            Pending</option>
+                                        <option value="in_process" >In Process</option>
+                                        <option value="completed" >
+                                            Completed</option>
+                                    </select>
+                                </form>
+
+                             
+                                {% elif task.assigned_employee %}
+                                <span class="badge bg-secondary">{{ task.assigned_employee.user.username }}</span>
+
+                                {% else %}
+                                <span class="text-muted small">Unassigned</span>
+                                {% endif %}
+                            </td>
+                        <tr>
+                            <!-- <td colspan="4" class="text-center py-4 text-muted">
+                                <p class="mb-0">your team does not heve any tasks yet</p>
+                            </td> -->
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card-footer text-end">
+            <a href="{% url 'home' %}" class="btn btn-outline-secondary btn-sm"> back home</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
