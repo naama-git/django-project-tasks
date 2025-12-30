@@ -2,9 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 
 
-# ======================================================
-# User – מודל הזדהות בסיסי
-# ======================================================
+# User
 class User(AbstractUser):
     phone_number = models.CharField(max_length=15, blank=True, null=True)
     date_of_birth = models.DateField(blank=True, null=True)
@@ -14,9 +12,7 @@ class User(AbstractUser):
         return self.username
 
 
-# ======================================================
-# Admin – אדמין גלובלי (אחד לכל האתר)
-# ======================================================
+# Admin
 class Admin(models.Model):
     user = models.OneToOneField(
         User,
@@ -28,9 +24,7 @@ class Admin(models.Model):
         return f"Admin: {self.user.username}"
 
 
-# ======================================================
-# Team – צוות ארגוני
-# ======================================================
+# Team
 class Team(models.Model):
     name = models.CharField(max_length=100, unique=True)
 
@@ -38,9 +32,7 @@ class Team(models.Model):
         return self.name
 
 
-# ======================================================
-# Employee – עובד (משויך לצוות אחד בלבד)
-# ======================================================
+# Employee
 class Employee(models.Model):
     user = models.OneToOneField(
         User,
@@ -57,9 +49,7 @@ class Employee(models.Model):
         return f"{self.user.username} ({self.team.name})"
 
 
-# ======================================================
-# Task – משימה ארגונית
-# ======================================================
+# Task
 class Task(models.Model):
 
     class Status(models.TextChoices):
