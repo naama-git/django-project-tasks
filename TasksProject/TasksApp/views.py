@@ -1,5 +1,5 @@
 from django.http import HttpResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, render, redirect
 from .forms import RegisterForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login
@@ -48,17 +48,48 @@ def login_view(request):
 
 
 def tasksListView(request):
-   print(f"User is: {request.user}, Authenticated: {request.user.is_authenticated}")
+  
    if request.user.is_authenticated:
+         if request.user.is_superuser:
+             tasks=Task.objects.all()
+             return render(request, 'tasksList.html', {'tasks': tasks})
+         member = Member.objects.filter(user=request.user).first()
+         if member:
+            team= member.team
+            tasks=Task.objects.filter(team=team)
+            return render(request, 'tasksList.html', {'tasks': tasks, 'member': member, 'team': team})
          
-         member = Member.objects.get(user=request.user)
-
-         team= member.team
-         tasks=Task.objects.filter(team=team)
-         return render(request, 'tasksList.html', {'tasks': tasks})
-   
    else:
        return redirect('login')
+   
+
+def update_task_member(request, task_id):
+    if request.user.is_authenticated:
+        task = get_object_or_404(Task, id=task_id)
+        member = Member.objects.filter(user=request.user).first()
+        if not member:
+            return redirect('tasksList')
+        if task.team == member.team:
+            task.assigned_employee =member
+            member.tasks.add(task)
+            task.save()
+        
+    return redirect('tasksList')
+
+def update_task_status(request, task_id):
+    if request.user.is_authenticated:
+        task = get_object_or_404(Task, id=task_id)
+        status = request.POST.get('new_status')
+        member = Member.objects.filter(user=request.user).first()
+        if not member:
+            return redirect('tasksList')
+        if task.assigned_employee == member:
+            task.status = status
+            task.save()
+        
+    return redirect('tasksList') 
+
+
    
 
     
