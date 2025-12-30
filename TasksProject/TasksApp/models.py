@@ -6,9 +6,6 @@ from django.contrib.auth.models import AbstractUser
 # user
 class User(AbstractUser):
     email = models.EmailField(unique=True)
-    
-    userName=models.CharField(max_length=150, blank=True)
-
     def __str__(self):
         return self.username
 
