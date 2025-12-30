@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from .forms import RegisterForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login
-from .models import Member
+from .models import Member, Task
 
 
 def home(request):
@@ -47,11 +47,16 @@ def login_view(request):
 
 
 
-def tasksList(request):
+def tasksListView(request):
+   print(f"User is: {request.user}, Authenticated: {request.user.is_authenticated}")
    if request.user.is_authenticated:
+         
          member = Member.objects.get(user=request.user)
-         tasks = member.team.memebers.all()
+
+         team= member.team
+         tasks=Task.objects.filter(team=team)
          return render(request, 'tasksList.html', {'tasks': tasks})
+   
    else:
        return redirect('login')
    
