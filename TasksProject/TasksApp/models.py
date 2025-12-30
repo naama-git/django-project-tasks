@@ -2,16 +2,14 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 
 
-# User
+
+# user
 class User(AbstractUser):
-    name = models.CharField(max_length=150)
-    password = models.CharField(max_length=128)
     email = models.EmailField(unique=True)
     def __str__(self):
         return self.username
 
-
-# Admin
+# admin
 class Admin(models.Model):
     user = models.OneToOneField(
         User,
@@ -22,8 +20,7 @@ class Admin(models.Model):
     def __str__(self):
         return f"Admin: {self.user.username}"
 
-
-# Team
+# team
 class Team(models.Model):
     name = models.CharField(max_length=100, unique=True)
 
@@ -31,24 +28,24 @@ class Team(models.Model):
         return self.name
 
 
-# Employee
-class Employee(models.Model):
+# member
+class Member(models.Model):
     user = models.OneToOneField(
         User,
         on_delete=models.CASCADE,
-        related_name="employee"
+        related_name="member"
     )
     team = models.ForeignKey(
         Team,
         on_delete=models.CASCADE,
-        related_name="employees"
+        related_name="memebers"
     )
 
     def __str__(self):
         return f"{self.user.username} ({self.team.name})"
 
 
-# Task
+# task
 class Task(models.Model):
 
     class Status(models.TextChoices):
@@ -57,7 +54,7 @@ class Task(models.Model):
         DONE = 'done', 'Done'
 
     title = models.CharField(max_length=200)
-    description = models.TextField(blank=True)
+    description = models.TextField(blank=True, max_length=500, null=True)
     due_date = models.DateField(blank=True, null=True)
 
     status = models.CharField(
@@ -66,16 +63,16 @@ class Task(models.Model):
         default=Status.PENDING
     )
 
-    # המשימה שייכת לצוות אחד
+    # task belongs to a team
     team = models.ForeignKey(
         Team,
         on_delete=models.CASCADE,
         related_name="tasks"
     )
 
-    # עובד מבצע (אופציונלי)
+    # task assigned to a member
     assigned_employee = models.ForeignKey(
-        Employee,
+        Member,
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
