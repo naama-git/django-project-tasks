@@ -3,32 +3,33 @@ from django.shortcuts import render, redirect
 from .forms import RegisterForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login
+from .models import Member
 
 
 def home(request):
     return render(request, "homePage.html")
-
-# def register(request):
-#     return render(request, "register.html")
-
 
 
 
 def register(request):
     if request.method == 'POST':
         form = RegisterForm(request.POST)
-        print(form.is_valid())
-        print(form.errors)
         if form.is_valid():
-            form.save()
-            print("User registered successfully.")
+            user = form.save()
+            team = form.cleaned_data['team']
+
+            Member.objects.create(
+                user=user,
+                team=team
+            )
+
             return redirect('login')
     else:
         form = RegisterForm()
-        print(form.errors)
-
 
     return render(request, 'register.html', {'form': form})
+
+
 
 def login_view(request):
     if request.method == 'POST':
