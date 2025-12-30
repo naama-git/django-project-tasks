@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render, redirect
 from .forms import RegisterForm
 from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 from .models import Member, Task
 
 
@@ -45,6 +45,9 @@ def login_view(request):
 
     return render(request, 'login.html', {'form': form})
 
+def logout_view(request):
+    logout(request)
+    return redirect('login')
 
 
 def tasksListView(request):
