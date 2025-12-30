@@ -1,7 +1,7 @@
 
 from django.contrib import admin
 from django.urls import path
-import 
+from TasksApp.views import register
 
 from TasksApp.views import home
 
