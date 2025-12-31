@@ -16,3 +16,4 @@ urlpatterns = [
     path('update-task-member/<int:task_id>/', update_task_member, name='update_task_member'),
     path('logout/', logout_view, name='logout'),
 ]
+

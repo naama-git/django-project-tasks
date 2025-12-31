@@ -22,6 +22,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin',
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -32,7 +33,6 @@ INSTALLED_APPS = [
     "TasksApp",
     'crispy_forms',
     'crispy_bootstrap5',
-    'jazzmin',
 ]
 
 MIDDLEWARE = [
@@ -128,11 +128,15 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 JAZZMIN_SETTINGS = {
   
     "site_title": "admin dashboard",
-    "site_brand": "Flow Team",
+    "site_brand": "Tasks Management",
     "hide_apps": ["auth.group"], 
     "hide_models": ["auth.group"], 
     "order_with_respect_to": ["auth", "your_app_name"],
     "changeform_format": "horizontal_tabs", 
+    "site_url": "/",
+    "topmenu_links": [  
+        {"name": "Go to Website", "url": "/", "new_window": False}, 
+    ],
 }
 JAZZMIN_UI_TWEAKS = {
     "theme": "zephyr",  
