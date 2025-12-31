@@ -79,5 +79,15 @@ class Task(models.Model):
         related_name="tasks"
     )
 
+    #chansh status to in progress when assigned to member
+    def save(self, *args, **kwargs):
+        if self.assigned_employee and self.status == Task.Status.PENDING:
+            self.status = Task.Status.IN_PROGRESS
+
+        if 'update_fields' in kwargs and kwargs['update_fields'] is not None:
+            kwargs['update_fields'] = set(kwargs['update_fields']) | {'status'}
+        
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return self.title

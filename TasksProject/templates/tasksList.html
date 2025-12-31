@@ -9,6 +9,36 @@
             <h3 class="mb-0"> tasks list - team : {{ team}}</h3>
             <span class="badge bg-light text-dark">member : {{ user.username }}</span>
         </div>
+
+         <!-- הוספת פילטרים -->
+        <form method="get" class="row g-2 mb-3 mt-3 ms-3">
+
+            <!-- פילטר לפי סטטוס -->
+            <div class="col-md-3">
+                <select name="status" class="form-select">
+                    <option value="">All statuses</option>
+                    <option value="pending" {% if selected_status == 'pending' %}selected{% endif %}>Pending</option>
+                    <option value="in_progress" {% if selected_status == 'in_progress' %}selected{% endif %}>In Progress
+                    </option>
+                    <option value="done" {% if selected_status == 'done' %}selected{% endif %}>Done</option>
+                </select>
+            </div>
+
+            <!-- פילטר לפי עובד משויך -->
+            <div class="col-md-3">
+                <select name="assigned" class="form-select">
+                    <option value="">All tasks</option>
+                    <option value="yes" {% if selected_assigned == 'yes' %}selected{% endif %}>Assigned</option>
+                    <option value="no" {% if selected_assigned == 'no' %}selected{% endif %}>Unassigned</option>
+                </select>
+            </div>
+
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary">Filter</button>
+            </div>
+
+        </form>
+
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-hover align-middle">
@@ -27,40 +57,40 @@
                             <td class="fw-bold">{{ task.title }}</td>
                             <td>{{ task.description|truncatechars:50 }}</td>
                             <td>
-                                {% if task.status == 'completed' %}
-                                <span class="badge rounded-pill bg-success">completed</span>
-                                {% elif task.status == 'in_process' %}
-                                <span class="badge rounded-pill bg-warning text-dark">in process</span>
+                                {% if task.status == 'done' %}
+                                <span class="badge rounded-pill bg-success">Done</span>
+                                {% elif task.status == 'in_progress' %}
+                                <span class="badge rounded-pill bg-warning text-dark">In Progress</span>
                                 {% else %}
-                                <span class="badge rounded-pill bg-secondary">pending</span>
+                                <span class="badge rounded-pill bg-secondary">Pending</span>
                                 {% endif %}
                             </td>
 
                             <td>{{ task.due_date|date:"d/m/Y" }}</td>
 
                             <td>
-                           
+
                                 {% if not task.assigned_employee and not user.is_superuser %}
                                 <form method="post" action="{% url 'update_task_member' task.id %}">
                                     {% csrf_token %}
                                     <button type="submit" class="btn btn-sm btn-outline-primary">Assign to me</button>
                                 </form>
 
-                        
+
                                 {% elif task.assigned_employee.user == user and not user.is_superuser %}
                                 <form method="post" action="{% url 'update_task_status' task.id %}">
                                     {% csrf_token %}
                                     <select name="new_status" class="form-select form-select-sm"
                                         onchange="this.form.submit()">
-                                        <option value="pending" >
+                                        <option value="pending">
                                             Pending</option>
-                                        <option value="in_process" >In Process</option>
-                                        <option value="completed" >
-                                            Completed</option>
+                                        <option value="in_progress">In Progress</option>
+                                        <option value="done">
+                                            Done</option>
                                     </select>
                                 </form>
 
-                             
+
                                 {% elif task.assigned_employee %}
                                 <span class="badge bg-secondary">{{ task.assigned_employee.user.username }}</span>
 
