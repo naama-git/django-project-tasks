@@ -6,6 +6,7 @@ from TasksApp.views import register
 from TasksApp.views import login_view
 
 
+
 urlpatterns = [
     path("admin/", admin.site.urls),
     path('', home, name='home'),

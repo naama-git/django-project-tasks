@@ -23,7 +23,6 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'jazzmin',
-    'jazzmin',
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -145,3 +144,6 @@ JAZZMIN_UI_TWEAKS = {
     "navbar": "navbar-dark",
     "brand_colour": "navbar-primary",
 }
+
+LOGOUT_REDIRECT_URL = 'login'
+
