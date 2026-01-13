@@ -7,11 +7,10 @@ from .models import  Task, Team
 
 class TaskAdmin(admin.ModelAdmin):
   
-    fields = ('title', 'description', 'team','due_date')
-    readonly_fields=('status','assigned_employee','assigned_employee' )
+    fields = ('title', 'description', 'team','due_date','status', 'assigned_employee' )
+    readonly_fields=('status','assigned_employee')
     list_filter = ('status', 'team','assigned_employee')
     search_fields = ('title', 'status','due_date','assigned_employee__user__username')
-
 
     def has_delete_permission(self, request, obj=None):
         if obj is None:
@@ -22,6 +21,7 @@ class TaskAdmin(admin.ModelAdmin):
         if obj is None:
             return True
         return obj.assigned_employee is None
+    
 
 
 admin.site.register(Team)

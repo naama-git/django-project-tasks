@@ -45,14 +45,15 @@ class Member(models.Model):
         return f"{self.user.username} ({self.team.name})"
 
 
+#status
+class Status(models.TextChoices):
+    PENDING = 'pending', 'Pending'
+    IN_PROGRESS = 'in_progress', 'In Progress'
+    DONE = 'done', 'Done'
+
+
 # task
 class Task(models.Model):
-
-    class Status(models.TextChoices):
-        PENDING = 'pending', 'Pending'
-        IN_PROGRESS = 'in_progress', 'In Progress'
-        DONE = 'done', 'Done'
-
     title = models.CharField(max_length=200)
     description = models.TextField(blank=True, max_length=500, null=True)
     due_date = models.DateField(blank=True, null=True)
@@ -81,8 +82,8 @@ class Task(models.Model):
 
     #chansh status to in progress when assigned to member
     def save(self, *args, **kwargs):
-        if self.assigned_employee and self.status == Task.Status.PENDING:
-            self.status = Task.Status.IN_PROGRESS
+        if self.assigned_employee and self.status == Status.PENDING:
+            self.status = Status.IN_PROGRESS
 
         if 'update_fields' in kwargs and kwargs['update_fields'] is not None:
             kwargs['update_fields'] = set(kwargs['update_fields']) | {'status'}
