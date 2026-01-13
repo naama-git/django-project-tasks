@@ -37,7 +37,6 @@ def login_view(request):
         if form.is_valid():
             user = form.get_user()
             login(request, user)
-            print("logged in")
             return redirect('home')
     else:
 
@@ -54,7 +53,6 @@ def tasksListView(request):
     if not request.user.is_authenticated:
         return redirect('login')
 
-    # ⭐ הוספה – קריאת פילטרים מה-URL
     status_filter = request.GET.get('status')
     assigned_filter = request.GET.get('assigned')
 
