@@ -1,7 +1,9 @@
 
 /__pycache__/
+./TasksProject/TasksApp/__pycache__
+./TasksProject/TasksApp/migrations/__pycache__
 *.pyc
-db.sqlite3
+./TasksProject/db.sqlite3
 .env
 /.vscode/
 
