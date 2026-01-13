@@ -13,13 +13,6 @@ class TaskAdmin(admin.ModelAdmin):
     search_fields = ('title', 'status','due_date','assigned_employee__user__username')
 
 
-    # def get_queryset(self, request):
-    #     return super().get_queryset(request)
-
-
-    # def has_view_permission(self, request, obj=None):
-    #     return True
-
     def has_delete_permission(self, request, obj=None):
         if obj is None:
             return False
