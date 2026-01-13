@@ -37,7 +37,6 @@ def login_view(request):
         if form.is_valid():
             user = form.get_user()
             login(request, user)
-            print("logged in")
             return redirect('home')
     else:
 
