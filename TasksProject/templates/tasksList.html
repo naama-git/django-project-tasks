@@ -5,23 +5,38 @@
 <div class="container mt-5">
     <div class="card shadow">
         <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            {%if not user.is_superuser%}
             <h3 class="mb-0"> tasks list - team : {{ team}}</h3>
-            <span class="badge bg-light text-dark">member : {{ user.username }}</span>
+            {%else%}
+            <h3 class="mb-0"> tasks list </h3>
+           
+            {%endif%}
+             <span class="badge bg-light text-dark">member : {{ user.username }}</span>
         </div>
 
-         <!-- הוספת פילטרים -->
+        <!-- הוספת פילטרים -->
         <form method="get" class="row g-2 mb-3 mt-3 ms-3">
 
             <!-- פילטר לפי סטטוס -->
             <div class="col-md-3">
                 <select name="status" class="form-select">
                     <option value="">All statuses</option>
-                    <option value="pending" {% if selected_status == 'pending' %}selected{% endif %}>Pending</option>
-                    <option value="in_progress" {% if selected_status == 'in_progress' %}selected{% endif %}>In Progress
+
+                    <option value="pending" {% if selected_status == "pending" %}selected{% endif %}>
+                        Pending
                     </option>
-                    <option value="done" {% if selected_status == 'done' %}selected{% endif %}>Done</option>
+
+                    <option value="in_progress" {% if selected_status == "in_progress" %}selected{% endif %}>
+                        In Progress
+                    </option>
+
+                    <option value="done" {% if selected_status == "done" %}selected{% endif %}>
+                        Done
+                    </option>
                 </select>
             </div>
+
+
 
             <!-- פילטר לפי עובד משויך -->
             <div class="col-md-3">
