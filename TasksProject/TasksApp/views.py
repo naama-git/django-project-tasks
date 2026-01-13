@@ -66,11 +66,11 @@ def tasksListView(request):
         team = member.team
         tasks = Task.objects.filter(team=team)
 
-    # ⭐ הוספה – פילטר לפי סטטוס
+    # הוספה – פילטר לפי סטטוס
     if status_filter:
         tasks = tasks.filter(status=status_filter)
 
-    # ⭐ הוספה – פילטר לפי עובד משויך / לא משויך
+    # הוספה – פילטר לפי עובד משויך / לא משויך
     if assigned_filter == 'yes':
         tasks = tasks.filter(assigned_employee__isnull=False)
     elif assigned_filter == 'no':
@@ -82,7 +82,6 @@ def tasksListView(request):
         {
             'tasks': tasks,
             'team': team if not request.user.is_superuser else None,
-            # ⭐ הוספה – לשמור בחירה ב־UI
             'selected_status': status_filter,
             'selected_assigned': assigned_filter,
         }
